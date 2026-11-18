@@ -1,5 +1,7 @@
 import json
 
+import pytest
+
 from lfm3ha.data import (
     _path_to_messages,
     categories,
@@ -160,6 +162,7 @@ def test_load_any_dataset_liest_save_to_disk_ordner(tmp_path):
     mit Metadaten-Spalten zurück – das Training scheiterte danach mit
     ``KeyError: 'messages'``.
     """
+    pytest.importorskip("datasets")
     from datasets import Dataset, DatasetDict
 
     from lfm3ha.data import load_any_dataset, load_split
