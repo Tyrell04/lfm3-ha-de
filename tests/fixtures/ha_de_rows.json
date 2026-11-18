@@ -1,0 +1,617 @@
+[
+ {
+  "locale": "de",
+  "messages": [
+   {
+    "role": "system",
+    "content": "Du bist der Sprachassistent eines Smart Homes mit Home Assistant. Antworte immer auf Deutsch und freundlich. Antworte kurz, meist in einem Satz.\nSteuere Geräte mit dem Werkzeug control. Frage Zustände und Messwerte mit get_state ab, bevor du Fragen dazu beantwortest.\nVerwende nur entity_ids aus der folgenden Liste. Gibt es ein Gerät nicht, sage das, statt eine entity_id zu erfinden.\nMeint der Nutzer alle Lichter eines Bereichs, gib statt entity_id den Bereich an (area), für das ganze Haus area \"*\".\nTimer stellst du mit timer, Uhrzeit und Datum liefert get_time, Durchsagen an alle Lautsprecher machst du mit broadcast.\n\nGeräte (entity_id | Name | Bereich):\nsensor.abstellraum_luftfeuchtigkeit | Abstellraum Luftfeuchtigkeit | Abstellraum\nlight.tz3000_ji4araar_ts0001_90 | Lavalampe | Außenbereich\nbinary_sensor.shellydimmer2_3c8a1fe0be | Eingang Fenster | Eingang\nlight.eingang_licht | Mondlampe | Eingang\nlight.tz3000_ji4araar_ts0001_730 | Eingang Decke | Eingang\nlight.tz3000_ji4araar_ts0001_8e9 | Eingang | Eingang\nmedia_player.eingang_nest_audio_eingang | Nest Audio Eingang | Eingang\nsensor.eingang_luftfeuchtigkeit | Eingang Luftfeuchtigkeit | Eingang\nsensor.eingang_temperatur | Temperatur Eingang | Eingang\nweather.bremen | Bremen | Garten\nlight.tz3000_ji4araar_ts0001_4b | Papierstern | Keller\nbinary_sensor.waschraum_fenster | Fenster Waschraum | Waschraum\nswitch.waschraum_heizluefter | Waschraum Heizlüfter | Waschraum\nlight.tz3000_ji4araar_ts0001_2b2 | Hauseingang Licht | Werkstatt\nsensor.temperatur_werkstatt | Werkstatt Temperatur | Werkstatt\nbinary_sensor.shellydimmer2_3c8a1fe083 | Fenster Wohnzimmer | Wohnzimmer\nclimate.tz3000_ji4araar_ts0001_32 | Thermostat Wohnzimmer | Wohnzimmer\nclimate.tz3000_ji4araar_ts0001_a2 | Wohnzimmer Splitgerät | Wohnzimmer\ncover.wohnzimmer_rollo | Rollo Wohnzimmer | Wohnzimmer\nfan.wohnzimmer_ventilator | Wohnzimmer Ventilator | Wohnzimmer\nlight.tz3000_ji4araar_ts0001_4c | Wohnzimmer Wandlampe | Wohnzimmer\nlight.tz3000_ji4araar_ts0001_910 | Stehleuchte | Wohnzimmer\nmedia_player.wohnzimmer_speaker_wohnzimmer | Wohnzimmer Speaker | Wohnzimmer\nswitch.wohnzimmer_kaffeemaschine | Wohnzimmer Kaffeemaschine | Wohnzimmer\nalarm_control_panel.haus_alarmanlage | Alarmanlage | -\nlight.tz3000_ji4araar_ts0001_eef | Alle Lampen | -\nlock.haus_gartentor | Gartentor | -\nsensor.battery_hv_state_of_charge_haus | EQA Ladestand | -\nsensor.haus_eqa_range_ev_remaining_range | EQA Reichweite | -\nsensor.haus_heizung_outdoor_temperature | Außentemperatur Haus | -\nsensor.haus_hoechsttemperatur_morgen | Höchsttemperatur morgen | -\nsensor.haus_vorhersage_temperatur_morgen | Vorhersage Temperatur morgen | -\nswitch.haus_heizung_eco_mode | Heizung Haus Eco-Modus | -\nvacuum.haus_staubsauger | Staubsauger | -"
+   },
+   {
+    "role": "user",
+    "content": "Lass den Saugroboter saugen"
+   },
+   {
+    "role": "assistant",
+    "content": null,
+    "tool_calls": [
+     {
+      "id": "call_28056",
+      "type": "function",
+      "function": {
+       "name": "control",
+       "arguments": "{\"actions\": [{\"service\": \"vacuum.start\", \"entity_id\": [\"vacuum.haus_staubsauger\"]}]}"
+      }
+     }
+    ]
+   },
+   {
+    "role": "tool",
+    "tool_call_id": "call_28056",
+    "content": "{\"success\": true}"
+   },
+   {
+    "role": "assistant",
+    "content": "Staubsauger legt los."
+   }
+  ],
+  "meta": {
+   "cat": "command",
+   "gold": [
+    [
+     "control",
+     {
+      "actions": [
+       {
+        "service": "vacuum.start",
+        "entity_id": [
+         "vacuum.haus_staubsauger"
+        ]
+       }
+      ]
+     }
+    ]
+   ],
+   "location": null,
+   "case": "command:i_vacuum",
+   "verbosity": "medium",
+   "groups": [
+    "light.tz3000_ji4araar_ts0001_eef"
+   ]
+  }
+ },
+ {
+  "locale": "de",
+  "messages": [
+   {
+    "role": "system",
+    "content": "Du bist der Sprachassistent eines Smart Homes mit Home Assistant. Antworte immer auf Deutsch und freundlich. Antworte ausführlich und nenne alle verfügbaren Details.\nSteuere Geräte mit dem Werkzeug control. Frage Zustände und Messwerte mit get_state ab, bevor du Fragen dazu beantwortest.\nVerwende nur entity_ids aus der folgenden Liste. Gibt es ein Gerät nicht, sage das, statt eine entity_id zu erfinden.\nMeint der Nutzer alle Lichter eines Bereichs, gib statt entity_id den Bereich an (area), für das ganze Haus area \"*\".\nTimer stellst du mit timer, Uhrzeit und Datum liefert get_time, Durchsagen an alle Lautsprecher machst du mit broadcast.\n\nGeräte (entity_id | Name | Bereich):\nclimate.thermostat_ankleide | Thermostat Ankleide | Ankleide\ncover.ankleide_jalousie | Jalousie Ankleide | Ankleide\nlight.ankleide_deckenlampe | Ecklampe | Ankleide\nlight.ankleide_stehlampe | Nanoleaf | Ankleide\nlight.spiegel_ankleide | Licht Bett | Ankleide\nsensor.ankleide_luftfeuchtigkeit | Luftfeuchtigkeit Ankleide | Ankleide\nsensor.ankleide_temperatur | Ankleide Temperatur | Ankleide\nswitch.ankleide_weihnachtsbaum | Weihnachtsbaum Ankleide | Ankleide\ncover.rollo_balkontuer_arbeitszimmer | Rollladen Balkontüre Arbeitszimmer | Arbeitszimmer\ncover.rollo_fenster_arbeitszimmer | Rollladen Fenster Arbeitszimmer | Arbeitszimmer\nlight.lichterkette_arbeitszimmer | Arbeitszimmer | Arbeitszimmer\ncover.balkon_markise | Balkon Markise | Balkon\nvalve.bewaesserung_balkon | Wasserventil | Balkon\nbinary_sensor.0x00158d000e24 | Büro Fenster | Büro\nlight.buero_licht | Licht Büro | Büro\nlight.nachttischlampe_buero | Licht Schrank | Büro\nsensor.buero_temperatur | Temperatur Büro | Büro\nbinary_sensor.0x00158d00033 | Fenster Eingang | Eingang\ncover.eingang_rollo | Rollo Eingang | Eingang\nlight.eingang_licht | Licht Eingang | Eingang\nsensor.luftfeuchtigkeit_eingang | Eingang Luftfeuchtigkeit | Eingang\nswitch.eingang_steckdose | Steckdose Eingang | Eingang\nbinary_sensor.0x00158d000759 | Gästezimmer Fenster | Gästezimmer\nclimate.gaestezimmer_klima | Klimaanlage Gästezimmer | Gästezimmer\ncover.rollo_gaestezimmer | Gästezimmer Rollo | Gästezimmer\nlight.gaestezimmer_lampe | Gästezimmer | Gästezimmer\nbinary_sensor.0x00158d000f72 | Heizungsraum Fenster | Heizungsraum\nsensor.heizungsraum_temperatur | Heizungsraum Temperatur | Heizungsraum\nswitch.heizungsraum_heizluefter | Heizungsraum Heizlüfter | Heizungsraum\nbinary_sensor.0x00158d000921 | Fenster Kinderzimmer | Kinderzimmer\nlight.kinderzimmer_spiegel | Salzlampe | Kinderzimmer\nlight.kinderzimmer_stehlampe | Licht Spiegel | Kinderzimmer\nsensor.kinderzimmer_luftfeuchtigkeit | Kinderzimmer Luftfeuchtigkeit | Kinderzimmer\nsensor.kinderzimmer_temperatur | Kinderzimmer Temperatur | Kinderzimmer\nbinary_sensor.0x00158d000dd | Küche Fenster | Küche\ncover.kueche_rollladen | Rollladen Küche | Küche\nlight.spots_kueche | Küche Spots | Küche\nmedia_player.speaker_kueche | Küche Lautsprecher | Küche\nsensor.luftfeuchtigkeit_kueche | Küche Luftfeuchtigkeit | Küche\nsensor.temperatur_kueche | Temperatur Küche | Küche\ncover.terrasse_markise | Terrasse Markise | Terrasse\nlight.led_strip_terrasse | Terrasse LED-Streifen | Terrasse\nsensor.valetudo_terrasse_battery_terrasse | Valetudo Batterie | Terrasse\nswitch.terrasse_heizluefter | Heizlüfter Terrasse | Terrasse\nvacuum.valetudo_terrasse | Valetudo | Terrasse\nsensor.luftfeuchtigkeit_waschraum | Waschraum Luftfeuchtigkeit | Waschraum\nsensor.waschraum_leistung | Waschraum Steckdose Leistung | Waschraum\nsensor.waschraum_temperatur | Waschraum Temperatur | Waschraum\nsensor.werkstatt_luftfeuchtigkeit | Werkstatt Luftfeuchtigkeit | Werkstatt\nswitch.wasserkocher_werkstatt | Werkstatt Wasserkocher | Werkstatt\nlight.spots_wohnzimmer | Spots Wohnzimmer | Wohnzimmer\nmedia_player.wohnzimmer_lg_webos_smart_tv | LG webOS Smart TV | Wohnzimmer\nsensor.temperatur_wohnzimmer | Temperatur Wohnzimmer | Wohnzimmer\nbutton.haus_bewaesserung_garten | Gartenbewässerung | -\ncover.rolllaeden_dg_haus | Rollläden DG | -\nlight.alle_lichter_haus | Alle Lichter | -\nscene.haus_filmabend | Filmabend | -\nscene.haus_konzentration | Konzentration | -\nscene.kochen_haus | Kochen | -\nscript.alles_aus_haus | Alles aus | -\nsensor.battery_hv_state_of_charge_haus | EQA Ladestand | -\nsensor.haus_eqa_range_ev_remaining_range | EQA Reichweite | -\nswitch.heizung_frost_protection_haus | Thermostat Frostschutz | -\nweather.freiburg | Freiburg | -"
+   },
+   {
+    "role": "user",
+    "content": "Spiel die Playlist Achtziger"
+   },
+   {
+    "role": "assistant",
+    "content": null,
+    "tool_calls": [
+     {
+      "id": "call_32295",
+      "type": "function",
+      "function": {
+       "name": "control",
+       "arguments": "{\"actions\": [{\"service\": \"media_player.search_and_play\", \"entity_id\": [\"media_player.speaker_kueche\"], \"data\": {\"query\": \"Achtziger\", \"media_type\": \"playlist\"}}]}"
+      }
+     }
+    ]
+   },
+   {
+    "role": "tool",
+    "tool_call_id": "call_32295",
+    "content": "{\"success\": false, \"error\": \"media_player.search_and_play failed for media_player.speaker_kueche: No results found for Achtziger\"}"
+   },
+   {
+    "role": "assistant",
+    "content": "Zu Achtziger habe ich leider nichts gefunden. Soll ich etwas anderes spielen?"
+   }
+  ],
+  "meta": {
+   "cat": "command",
+   "gold": [
+    [
+     "control",
+     {
+      "actions": [
+       {
+        "service": "media_player.search_and_play",
+        "entity_id": [
+         "media_player.speaker_kueche"
+        ],
+        "data": {
+         "query": "Achtziger",
+         "media_type": "playlist"
+        }
+       }
+      ]
+     }
+    ]
+   ],
+   "location": null,
+   "case": "music:error",
+   "verbosity": "detailed",
+   "groups": [
+    "light.alle_lichter_haus"
+   ]
+  }
+ },
+ {
+  "locale": "de",
+  "messages": [
+   {
+    "role": "system",
+    "content": "Du bist der Sprachassistent eines Smart Homes mit Home Assistant. Antworte immer auf Deutsch und freundlich. Antworte in ganzen Sätzen und nenne die wichtigsten Details.\nSteuere Geräte mit dem Werkzeug control. Frage Zustände und Messwerte mit get_state ab, bevor du Fragen dazu beantwortest.\nVerwende nur entity_ids aus der folgenden Liste. Gibt es ein Gerät nicht, sage das, statt eine entity_id zu erfinden.\nMeint der Nutzer alle Lichter eines Bereichs, gib statt entity_id den Bereich an (area), für das ganze Haus area \"*\".\nTimer stellst du mit timer, Uhrzeit und Datum liefert get_time, Durchsagen an alle Lautsprecher machst du mit broadcast.\n\nGeräte (entity_id | Name | Bereich):\nlight.shellyplus1pm_886a | Lampe Arbeitszimmer | Arbeitszimmer\nsensor.hue_color_lamp_3c83e2 | Luftfeuchtigkeit Arbeitszimmer | Arbeitszimmer\nsensor.hue_color_lamp_43d714 | Temperatur Arbeitszimmer | Arbeitszimmer\nlight.homematic_hm_ea3f | Spots Esszimmer | Esszimmer\nlight.shellyplus1pm_e682 | Sternenhimmel | Esszimmer\nlight.stehlampe_esszimmer | Lampe Sofa | Esszimmer\nbinary_sensor.fenster_gaestezimmer | Fenster Gästezimmer | Gästezimmer\ncover.tasmota_e4e18d | Gästezimmer Jalousie | Gästezimmer\nsensor.tuya_c1e24e | Gästezimmer Temperatur | Gästezimmer\nbinary_sensor.tz3000_7ebe | Fenster Hauswirtschaftsraum | Hauswirtschaftsraum\nsensor.sonoff_basic_ced628 | Saugroboter Akku | Hauswirtschaftsraum\nsensor.tuya_5af9 | Luftfeuchtigkeit Hauswirtschaftsraum | Hauswirtschaftsraum\nswitch.shelly1_90ad | Hauswirtschaftsraum Kaffeemaschine | Hauswirtschaftsraum\nvacuum.saugroboter_hwr | Saugroboter | Hauswirtschaftsraum\ncover.shellyplus1pm_53cf41 | Kinderzimmer Rollläden | Kinderzimmer\nmedia_player.kinderzimmer_home_assistant_voice_1f16a6 | Home Assistant Voice 1f16a6 | Kinderzimmer\nmedia_player.zbmini_d67e67 | Samsung TV | Kinderzimmer\nbinary_sensor.hue_color_lamp_c016 | Fenster Küche | Küche\ncover.kueche_rolllaeden_balkontuer | Rolladen Balkontür Küche | Küche\ncover.shellyplus1pm_8006 | Rolladen Fenster Küche | Küche\nlight.decke_kueche | Küche | Küche\nlight.kueche_led_strip | Küche Links | Küche\nsensor.kueche_temperatur | Temperatur Küche | Küche\nsensor.zbmini_971e | Luftfeuchtigkeit Küche | Küche\nlight.homematic_hm_b4f521 | Pendelleuchte Treppenhaus | Treppenhaus\nlight.treppenhaus_wandlampe | Treppenhaus Wandlampe | Treppenhaus\nlight.tz3000_dd7823 | Treppenhaus | Treppenhaus\nmedia_player.waschkueche_atom_echo_0d6791_media_player | Atom Echo 0d6791 Media Player | Waschküche\nsensor.tz3000_e9a436 | Luftfeuchtigkeit Waschküche | Waschküche\nbinary_sensor.hue_color_lamp_d205 | Wohnzimmer Fenster | Wohnzimmer\nclimate.tz3000_ji4araar_ts0001_f13 | Wohnzimmer Klimaanlage | Wohnzimmer\ncover.fritz_dect_0f2a | Wohnzimmer Rollladen | Wohnzimmer\nlight.wohnzimmer_stehlampe | Hue Play | Wohnzimmer\nbutton.haus_bewaesserung_garten | Bewässerung starten | -\ncover.haus_rollos_dg | Rollos Dachgeschoss | -\ncover.hue_color_lamp_45f1 | Alle Rolladen | -\nscene.lesen_haus | Lesen | -\nscene.shelly1_835e57 | Abendessen | -\nscene.shelly1_8f76 | Aufwachen | -\nsensor.haus_gefuehlte_temperatur | Gefühlte Temperatur | -\nsensor.haus_heizung_outdoor_temperature | Außentemperatur Heizung | -\nsensor.shelly1_a9ee6d | Wetterstation Temperatur | -\nswitch.fritz_dect_6776 | Thermostat Frostschutz | -\ntodo.baumarkt | Baumarkt | -\ntodo.einkaufsliste | Einkaufsliste | -\nweather.wettervorhersage | Wettervorhersage | -"
+   },
+   {
+    "role": "user",
+    "content": "Ich muss Äpfel, Quark und Brot kaufen"
+   },
+   {
+    "role": "assistant",
+    "content": null,
+    "tool_calls": [
+     {
+      "id": "call_02090",
+      "type": "function",
+      "function": {
+       "name": "control",
+       "arguments": "{\"actions\": [{\"service\": \"todo.add_item\", \"entity_id\": [\"todo.einkaufsliste\"], \"data\": {\"item\": \"Äpfel\"}}, {\"service\": \"todo.add_item\", \"entity_id\": [\"todo.einkaufsliste\"], \"data\": {\"item\": \"Quark\"}}, {\"service\": \"todo.add_item\", \"entity_id\": [\"todo.einkaufsliste\"], \"data\": {\"item\": \"Brot\"}}]}"
+      }
+     }
+    ]
+   },
+   {
+    "role": "tool",
+    "tool_call_id": "call_02090",
+    "content": "{\"success\": true}"
+   },
+   {
+    "role": "assistant",
+    "content": "Ich habe Äpfel, Quark und Brot auf die Einkaufsliste gesetzt."
+   },
+   {
+    "role": "user",
+    "content": "Stell einen Timer auf 2 Minuten und dann aktiviere die Szene Lesen"
+   },
+   {
+    "role": "assistant",
+    "content": null,
+    "tool_calls": [
+     {
+      "id": "call_02089",
+      "type": "function",
+      "function": {
+       "name": "timer",
+       "arguments": "{\"action\": \"start\", \"minutes\": 2, \"command\": \"Aktiviere die Szene Lesen\"}"
+      }
+     }
+    ]
+   },
+   {
+    "role": "tool",
+    "tool_call_id": "call_02089",
+    "content": "{\"success\": true}"
+   },
+   {
+    "role": "assistant",
+    "content": "In 2 Minuten erledige ich das."
+   }
+  ],
+  "meta": {
+   "cat": "timer",
+   "gold": [
+    [
+     "timer",
+     {
+      "action": "start",
+      "minutes": 2,
+      "command": "Aktiviere die Szene Lesen"
+     }
+    ]
+   ],
+   "location": null,
+   "case": "timer:delayed",
+   "verbosity": "long",
+   "groups": [
+    "cover.hue_color_lamp_45f1"
+   ]
+  }
+ },
+ {
+  "locale": "de",
+  "messages": [
+   {
+    "role": "system",
+    "content": "Du bist der Sprachassistent eines Smart Homes mit Home Assistant. Antworte immer auf Deutsch und freundlich. Antworte in ganzen Sätzen und nenne die wichtigsten Details.\nSteuere Geräte mit dem Werkzeug control. Frage Zustände und Messwerte mit get_state ab, bevor du Fragen dazu beantwortest.\nVerwende nur entity_ids aus der folgenden Liste. Gibt es ein Gerät nicht, sage das, statt eine entity_id zu erfinden.\nMeint der Nutzer alle Lichter eines Bereichs, gib statt entity_id den Bereich an (area), für das ganze Haus area \"*\".\nTimer stellst du mit timer, Uhrzeit und Datum liefert get_time, Durchsagen an alle Lautsprecher machst du mit broadcast.\n\nGeräte (entity_id | Name | Bereich):\ncover.sonoff_basic_44f2 | Balkon Markise | Balkon\nsensor.balkon_aussentemperatur | Temperatur Balkon | Balkon\nsensor.tz3000_d87d | Erdbeeren Bodenfeuchte | Balkon\nlight.shelly1_fb97 | Waschküche Wandlampe | Waschküche\nmedia_player.waschkueche_lautsprecher_waschkueche | Waschküche Lautsprecher | Waschküche\nsensor.waschkueche_temperatur | Temperatur Waschküche | Waschküche\nbinary_sensor.homematic_hm_ad6e | Anwesenheit Waschraum | Waschraum\nbinary_sensor.sonoff_basic_8ddebf | Fenster Waschraum | Waschraum\nsensor.tasmota_36e5b6 | Waschraum Temperatur | Waschraum\nalarm_control_panel.tasmota_0db5d2 | Alarmanlage | -\nbinary_sensor.sonoff_basic_2543 | Haus Motion | -\nbutton.haus_sonoff_basic_320dc3_absaugen | Dreame L10s Absaugen | -\nlock.haus_hintertuer | Hintertür | -\nscene.konzentration_haus | Konzentration | -\nscene.tasmota_41a4 | Aufwachen | -\nscene.tasmota_7ad1 | Abendessen | -\nscene.tz3000_51b098 | Romantisch | -\nscript.zbmini_a397 | Alles aus | -\nsensor.sonoff_basic_320dc3_battery_haus | Dreame L10s Battery | -\ntodo.drogerie | Drogerie | -\ntodo.hardware_store | Baumarkt | -\ntodo.shopping_list | Einkaufsliste | -\nvacuum.sonoff_basic_320dc3 | Dreame L10s | -\nweather.bonn | Bonn | -\n\nDas Sprachgerät steht im Bereich: Balkon"
+   },
+   {
+    "role": "user",
+    "content": "Super, danke"
+   },
+   {
+    "role": "assistant",
+    "content": "Gerne."
+   },
+   {
+    "role": "user",
+    "content": "die Lichter in der Waschküche aus"
+   },
+   {
+    "role": "assistant",
+    "content": null,
+    "tool_calls": [
+     {
+      "id": "call_52415",
+      "type": "function",
+      "function": {
+       "name": "control",
+       "arguments": "{\"actions\": [{\"service\": \"light.turn_off\", \"area\": \"Waschküche\"}]}"
+      }
+     }
+    ]
+   },
+   {
+    "role": "tool",
+    "tool_call_id": "call_52415",
+    "content": "{\"success\": true, \"done\": [\"light.shelly1_fb97\"]}"
+   },
+   {
+    "role": "assistant",
+    "content": "Ich habe die Lichter in der Waschküche ausgeschaltet."
+   },
+   {
+    "role": "user",
+    "content": "Nimm das zurück"
+   },
+   {
+    "role": "assistant",
+    "content": null,
+    "tool_calls": [
+     {
+      "id": "call_52416",
+      "type": "function",
+      "function": {
+       "name": "control",
+       "arguments": "{\"actions\": [{\"service\": \"light.turn_on\", \"area\": \"Waschküche\"}]}"
+      }
+     }
+    ]
+   },
+   {
+    "role": "tool",
+    "tool_call_id": "call_52416",
+    "content": "{\"success\": true, \"done\": [\"light.shelly1_fb97\"]}"
+   },
+   {
+    "role": "assistant",
+    "content": "Okay, ich habe das Licht in der Waschküche eingeschaltet."
+   }
+  ],
+  "meta": {
+   "cat": "conversation",
+   "gold": [],
+   "gold_last": [
+    [
+     "control",
+     {
+      "actions": [
+       {
+        "service": "light.turn_on",
+        "area": "Waschküche",
+        "entity_id": [
+         "light.shelly1_fb97"
+        ]
+       }
+      ]
+     }
+    ]
+   ],
+   "location": "Balkon",
+   "case": "conversation:turn_undo",
+   "verbosity": "long",
+   "groups": []
+  }
+ },
+ {
+  "locale": "de",
+  "messages": [
+   {
+    "role": "system",
+    "content": "Du bist der Sprachassistent eines Smart Homes mit Home Assistant. Antworte immer auf Deutsch und freundlich. Antworte kurz, meist in einem Satz.\nSteuere Geräte mit dem Werkzeug control. Frage Zustände und Messwerte mit get_state ab, bevor du Fragen dazu beantwortest.\nVerwende nur entity_ids aus der folgenden Liste. Gibt es ein Gerät nicht, sage das, statt eine entity_id zu erfinden.\nMeint der Nutzer alle Lichter eines Bereichs, gib statt entity_id den Bereich an (area), für das ganze Haus area \"*\".\nTimer stellst du mit timer, Uhrzeit und Datum liefert get_time, Durchsagen an alle Lautsprecher machst du mit broadcast.\n\nGeräte (entity_id | Name | Bereich):\ncover.ankleide_rollo | Ankleide Rollo | Ankleide\nlight.hmip_etrv_b_2_r4m_00a3c5e7f917d3 | Licht Theke | Ankleide\nlight.hmip_etrv_b_2_r4m_00a3c5e7f91d8f | Licht Bett | Ankleide\nbinary_sensor.aussen_motion | Außenbereich Motion | Außenbereich\ncover.aussen_markise | Markise Außenbereich | Außenbereich\nlight.hmip_etrv_b_2_r4m_00a3c5e7f9148b | Außenbereich | Außenbereich\nsensor.leistung_aussen | Leistung Außenbereich | Außenbereich\nsensor.plant_sensor_aussen | Monstera Bodenfeuchte | Außenbereich\nweather.augsburg | Augsburg | Außenbereich\nbinary_sensor.fenster_badezimmer | Fenster Badezimmer | Badezimmer\ncover.badezimmer_jalousie | Jalousie Badezimmer | Badezimmer\nlight.badezimmer_nachttischlampe | Badezimmer | Badezimmer\nbinary_sensor.carport_presence | Carport Presence | Carport\nlight.hmip_etrv_b_2_r4m_00a3c5e7f91f73 | Carport Treppe | Carport\nswitch.carport_weihnachtsbaum | Weihnachtsbaum Carport | Carport\nlight.hmip_etrv_b_2_r4m_00a3c5e7f91964 | Dachboden Wandlampe | Dachboden\nsensor.dachboden_temperatur | Temperatur Dachboden | Dachboden\nsensor.printer_dachboden | Bambu X1C Chamber temperature | Dachboden\nsensor.plant_sensor_einfahrt | Ficus Bodenfeuchte | Einfahrt\nlight.garten_nachttischlampe | Lampe Ecke | Garten\nlight.hmip_etrv_b_2_r4m_00a3c5e7f9137 | Garten | Garten\nsensor.temperature_garten | Garten Temperatur | Garten\nbinary_sensor.gaeste_wc_fenster | Fenster Gäste-WC | Gäste-WC\nlight.hmip_etrv_b_2_r4m_00a3c5e7f91cc | Nachttischlampe Gäste-WC | Gäste-WC\nlight.hmip_etrv_b_2_r4m_00a3c5e7f91cee | Tischleuchte | Gäste-WC\nlight.hmip_etrv_b_2_r4m_00a3c5e7f91ea | Deckenlicht Gäste-WC | Gäste-WC\nbinary_sensor.fenster_hwr | Fenster Hauswirtschaftsraum | Hauswirtschaftsraum\nsensor.hwr_temperatur | Temperatur Hauswirtschaftsraum | Hauswirtschaftsraum\nbinary_sensor.heizungsraum_fenster | Fenster Heizungsraum | Heizungsraum\nlight.hmip_etrv_b_2_r4m_00a3c5e7f91fc | Vitrine | Heizungsraum\nmedia_player.heizungsraum_nest_mini | Nest Mini | Heizungsraum\nsensor.heizungsraum_plant_sensor | Zitronenbaum Bodenfeuchte | Heizungsraum\nsensor.heizungsraum_weather_station | Regenmenge | Heizungsraum\nswitch.bewaesserung_heizungsraum | Heizungsraum Bewässerung | Heizungsraum\nlight.hmip_etrv_b_2_r4m_00a3c5e7f91047 | Keller | Keller\nsensor.keller_luftfeuchtigkeit | Keller Luftfeuchtigkeit | Keller\nclimate.heizung_kinderzimmer | Kinderzimmer Heizung | Kinderzimmer\nclimate.kinderzimmer_klima | Kinderzimmer Splitgerät | Kinderzimmer\nlight.hmip_etrv_b_2_r4m_00a3c5e7f9133 | Kinderzimmer | Kinderzimmer\nmedia_player.kinderzimmer_kinderzimmer_lautsprecher | Kinderzimmer Lautsprecher | Kinderzimmer\nsensor.kinderzimmer_temperatur | Temperatur Kinderzimmer | Kinderzimmer\nsensor.leistung_kinderzimmer | Leistung Kinderzimmer | Kinderzimmer\nbinary_sensor.kueche_balkontuer | Balkontür Küche | Küche\nbinary_sensor.kueche_fenster | Fenster Küche | Küche\nlight.hmip_etrv_b_2_r4m_00a3c5e7f912b6 | Spiegellicht Küche | Küche\nlight.kueche_deckenlampe | Küche Deckenlampe | Küche\nlight.kueche_wandlampe | Küche Wandlampe | Küche\nsensor.kueche_luftfeuchtigkeit | Luftfeuchtigkeit Küche | Küche\nsensor.kueche_temperatur | Küche Temperatur | Küche\nsensor.weather_station_kueche | Regenmenge | Küche\ncover.markise_terrasse | Terrasse Markise | Terrasse\nlight.hmip_etrv_b_2_r4m_00a3c5e7f9132a | Licht Kommode | Terrasse\nlight.hmip_etrv_b_2_r4m_00a3c5e7f9155 | LED-Streifen Terrasse | Terrasse\nlight.hmip_etrv_b_2_r4m_00a3c5e7f918a | Treppenhaus Stehlampe | Treppenhaus\nsensor.treppenhaus_luftfeuchtigkeit | Luftfeuchtigkeit Treppenhaus | Treppenhaus\nsensor.treppenhaus_weather_station | Regenmenge | Treppenhaus\nvacuum.treppenhaus_dreame_l10s | Dreame L10s | Treppenhaus\nlight.hmip_etrv_b_2_r4m_00a3c5e7f9178a | Waschraum Kamin | Waschraum\nlight.hmip_etrv_b_2_r4m_00a3c5e7f917f | Licht Schrank | Waschraum\nbinary_sensor.werkstatt_fenster | Werkstatt Fenster | Werkstatt\nlight.hmip_etrv_b_2_r4m_00a3c5e7f91b8 | Werkstatt Spots | Werkstatt\nmedia_player.werkstatt_music_assistant_werkstatt | Music Assistant Werkstatt | Werkstatt\nbinary_sensor.haus_wohnungstuer_state | Wohnungstür | -\ncover.haus_alle_rolladen | Alle Rollläden | -\ninput_boolean.haus_partymodus | Partymodus | -\ninput_boolean.haus_urlaub | Urlaub | -\nlock.haus_gartentor | Gartentor | -\nscene.filmabend_haus | Filmabend | -\nscript.haus_kaffee_kochen | Kaffee kochen | -\nsensor.haus_battery | Rauchmelder Batterie | -\nsensor.weather_station_haus | Regenmenge | -\ntodo.shopping_list | Einkaufsliste | -"
+   },
+   {
+    "role": "user",
+    "content": "Brot-Timer pausieren"
+   },
+   {
+    "role": "assistant",
+    "content": null,
+    "tool_calls": [
+     {
+      "id": "call_47227",
+      "type": "function",
+      "function": {
+       "name": "timer",
+       "arguments": "{\"action\": \"pause\", \"name\": \"Brot\"}"
+      }
+     }
+    ]
+   },
+   {
+    "role": "tool",
+    "tool_call_id": "call_47227",
+    "content": "{\"success\": true}"
+   },
+   {
+    "role": "assistant",
+    "content": "Der Brot-Timer ist pausiert."
+   }
+  ],
+  "meta": {
+   "cat": "timer",
+   "gold": [
+    [
+     "timer",
+     {
+      "action": "pause",
+      "name": "Brot"
+     }
+    ]
+   ],
+   "location": null,
+   "case": "timer:pause",
+   "verbosity": "medium",
+   "groups": [
+    "cover.haus_alle_rolladen"
+   ]
+  }
+ },
+ {
+  "locale": "de",
+  "messages": [
+   {
+    "role": "system",
+    "content": "Du bist der Sprachassistent eines Smart Homes mit Home Assistant. Antworte immer auf Deutsch und freundlich. Antworte ausführlich und nenne alle verfügbaren Details.\nSteuere Geräte mit dem Werkzeug control. Frage Zustände und Messwerte mit get_state ab, bevor du Fragen dazu beantwortest.\nVerwende nur entity_ids aus der folgenden Liste. Gibt es ein Gerät nicht, sage das, statt eine entity_id zu erfinden.\nMeint der Nutzer alle Lichter eines Bereichs, gib statt entity_id den Bereich an (area), für das ganze Haus area \"*\".\nTimer stellst du mit timer, Uhrzeit und Datum liefert get_time, Durchsagen an alle Lautsprecher machst du mit broadcast.\n\nGeräte (entity_id | Name | Bereich):\nbinary_sensor.window_dressing_room | Fenster Ankleide | Ankleide\nclimate.tz3000_ji4araar_ts0001_e4 | Ankleide Heizkörper | Ankleide\ncover.hmip_swdm_2_00b4d6f8a2c3efb | Rollläden Ankleide | Ankleide\nlight.dressing_room_fairy_lights | Ankleide Lichterkette | Ankleide\nlight.dressing_room_reading_lamp | Ankleide Leselampe | Ankleide\nlight.dressing_room_spotlights | Ankleide Spots | Ankleide\nbinary_sensor.window_utility_room | Fenster Hauswirtschaftsraum | Hauswirtschaftsraum\nswitch.utility_room_xmas_tree | Hauswirtschaftsraum Weihnachtsbaum | Hauswirtschaftsraum\nbutton.terrace_irrigation_start | Bewässerung Terrasse | Terrasse\nsensor.terrace_outdoor_temperature | Temperatur Terrasse | Terrasse\nclimate.tz3000_ji4araar_ts0001_48 | Treppenhaus Thermostat | Treppenhaus\nlight.stairs_wall_lamp | Hue Play | Treppenhaus\nmedia_player.stairs_voice_media_player | Atom Echo 6f272e Media Player | Treppenhaus\nsensor.stairs_power | Leistung Treppenhaus | Treppenhaus\nsensor.stairs_temperature | Treppenhaus Temperatur | Treppenhaus\nswitch.stairs_kettle | Wasserkocher Treppenhaus | Treppenhaus\nsensor.utility_trockner_status | Trockner | Waschraum\nswitch.utility_trockner_steckdose | Trockner Steckdose | Waschraum\nswitch.utility_xmas_tree | Weihnachtsbaum Waschraum | Waschraum\nsensor.workshop_power | Steckdose Leistung Werkstatt | Werkstatt\nbinary_sensor.front_door_contact_home | Wohnungstüre | -\nlight.all_lights_home | Alle Lichter | -\nlight.home_lights_untergeschoss | Lichter Untergeschoss | -\nsensor.home_dryer_status | Wäschetrockner | -\nsensor.zuhause_outdoor_temperature_home | Außentemperatur Haus | -\nswitch.dryer_steckdose_home | Wäschetrockner Strom | -\nswitch.zuhause_eco_mode_home | Thermostat Eco-Modus | -\ntodo.aufgaben | Aufgaben | -\ntodo.einkaufsliste | Einkaufsliste | -\nweather.kiel | Kiel | -"
+   },
+   {
+    "role": "user",
+    "content": "Starte den Backofen"
+   },
+   {
+    "role": "assistant",
+    "content": "Ich kenne kein Gerät Backofen. Das kann ich leider nicht steuern."
+   },
+   {
+    "role": "user",
+    "content": "Licht an in der Ankleide"
+   },
+   {
+    "role": "assistant",
+    "content": null,
+    "tool_calls": [
+     {
+      "id": "call_52392",
+      "type": "function",
+      "function": {
+       "name": "control",
+       "arguments": "{\"actions\": [{\"service\": \"light.turn_on\", \"area\": \"Ankleide\"}]}"
+      }
+     }
+    ]
+   },
+   {
+    "role": "tool",
+    "tool_call_id": "call_52392",
+    "content": "{\"success\": true, \"done\": [\"light.dressing_room_spotlights\", \"light.dressing_room_reading_lamp\", \"light.dressing_room_fairy_lights\"]}"
+   },
+   {
+    "role": "assistant",
+    "content": "Ich habe das Licht in der Ankleide eingeschaltet."
+   },
+   {
+    "role": "user",
+    "content": "Falsch, im Treppenhaus"
+   },
+   {
+    "role": "assistant",
+    "content": null,
+    "tool_calls": [
+     {
+      "id": "call_52393",
+      "type": "function",
+      "function": {
+       "name": "control",
+       "arguments": "{\"actions\": [{\"service\": \"light.turn_off\", \"area\": \"Ankleide\"}, {\"service\": \"light.turn_on\", \"area\": \"Treppenhaus\"}]}"
+      }
+     }
+    ]
+   },
+   {
+    "role": "tool",
+    "tool_call_id": "call_52393",
+    "content": "{\"success\": true, \"done\": [\"light.dressing_room_spotlights\", \"light.dressing_room_reading_lamp\", \"light.dressing_room_fairy_lights\", \"light.stairs_wall_lamp\"]}"
+   },
+   {
+    "role": "assistant",
+    "content": "Okay, ich habe das Licht in der Ankleide ausgeschaltet und das Licht im Treppenhaus eingeschaltet."
+   },
+   {
+    "role": "user",
+    "content": "in der ankleide das licht ausmachen"
+   },
+   {
+    "role": "assistant",
+    "content": null,
+    "tool_calls": [
+     {
+      "id": "call_52394",
+      "type": "function",
+      "function": {
+       "name": "control",
+       "arguments": "{\"actions\": [{\"service\": \"light.turn_off\", \"area\": \"Ankleide\"}]}"
+      }
+     }
+    ]
+   },
+   {
+    "role": "tool",
+    "tool_call_id": "call_52394",
+    "content": "{\"success\": true, \"done\": [\"light.dressing_room_spotlights\", \"light.dressing_room_reading_lamp\", \"light.dressing_room_fairy_lights\"]}"
+   },
+   {
+    "role": "assistant",
+    "content": "Ich habe das Licht in der Ankleide ausgeschaltet."
+   },
+   {
+    "role": "user",
+    "content": "Wie warm ist es im Treppenhaus?"
+   },
+   {
+    "role": "assistant",
+    "content": null,
+    "tool_calls": [
+     {
+      "id": "call_52395",
+      "type": "function",
+      "function": {
+       "name": "get_state",
+       "arguments": "{\"entity_ids\": [\"sensor.stairs_temperature\"]}"
+      }
+     }
+    ]
+   },
+   {
+    "role": "tool",
+    "tool_call_id": "call_52395",
+    "content": "[{\"entity_id\": \"sensor.stairs_temperature\", \"name\": \"Treppenhaus Temperatur\", \"state\": \"21.6\", \"device_class\": \"temperature\", \"unit_of_measurement\": \"°C\"}]"
+   },
+   {
+    "role": "assistant",
+    "content": "Die Temperatur im Treppenhaus liegt bei 21,6 Grad."
+   },
+   {
+    "role": "user",
+    "content": "Was hast du bisher geschaltet"
+   },
+   {
+    "role": "assistant",
+    "content": "Ich habe das Licht in der Ankleide eingeschaltet, das Licht in der Ankleide ausgeschaltet, das Licht im Treppenhaus eingeschaltet und das Licht in der Ankleide ausgeschaltet."
+   }
+  ],
+  "meta": {
+   "cat": "conversation",
+   "gold": [],
+   "gold_last": [],
+   "location": null,
+   "case": "conversation:room_correct",
+   "verbosity": "detailed",
+   "groups": [
+    "light.all_lights_home"
+   ]
+  }
+ },
+ {
+  "locale": "de",
+  "messages": [
+   {
+    "role": "system",
+    "content": "Du bist der Sprachassistent eines Smart Homes mit Home Assistant. Antworte immer auf Deutsch und freundlich. Antworte so knapp wie möglich, mit wenigen Worten.\nSteuere Geräte mit dem Werkzeug control. Frage Zustände und Messwerte mit get_state ab, bevor du Fragen dazu beantwortest.\nVerwende nur entity_ids aus der folgenden Liste. Gibt es ein Gerät nicht, sage das, statt eine entity_id zu erfinden.\nMeint der Nutzer alle Lichter eines Bereichs, gib statt entity_id den Bereich an (area), für das ganze Haus area \"*\".\nTimer stellst du mit timer, Uhrzeit und Datum liefert get_time, Durchsagen an alle Lautsprecher machst du mit broadcast.\n\nGeräte (entity_id | Name | Bereich):\nlight.homematic_hm_f17b9e | Stehleuchte | Balkon\nswitch.balkon_monitor | Balkon Monitor | Balkon\nbinary_sensor.sonoff_basic_033bc3 | Eingang Fenster | Eingang\nlight.shelly1_1d883f | Govee Strip | Eingang\nlight.tz3000_8a40 | Leselampe Eingang | Eingang\nsensor.eingang_leistung | Eingang Steckdose Leistung | Eingang\nsensor.eingang_temperatur | Eingang Temperatur | Eingang\nsensor.shellyplus1pm_1aa90c | Leistung Gäste-WC | Gäste-WC\nlight.shellyplus1pm_2e089e | Deckenlampe Hauswirtschaftsraum | Hauswirtschaftsraum\nlight.tz3000_6aeb4f | Licht Schreibtisch | Hauswirtschaftsraum\nmedia_player.zbmini_083653 | Echo Dot ebc7 | Hauswirtschaftsraum\nsensor.luftfeuchtigkeit_hwr | Luftfeuchtigkeit Hauswirtschaftsraum | Hauswirtschaftsraum\nsensor.tz3000_4ceb | Temperatur Hauswirtschaftsraum | Hauswirtschaftsraum\nswitch.hwr_echo_dot_ebc7_do_not_disturb | Echo Dot ebc7 Do not disturb | Hauswirtschaftsraum\nswitch.hwr_echo_dot_ebc7_mute | Echo Dot ebc7 Mute | Hauswirtschaftsraum\nbinary_sensor.hue_color_lamp_d266 | Fenster Kinderzimmer | Kinderzimmer\ncover.tz3000_156dd5 | Rollladen Kinderzimmer | Kinderzimmer\nlight.homematic_hm_55aef8 | Ecklampe | Kinderzimmer\nlight.pendelleuchte_kinderzimmer | Pendelleuchte Kinderzimmer | Kinderzimmer\nbinary_sensor.hue_color_lamp_a276 | Balkontür Schlafzimmer | Schlafzimmer\nbinary_sensor.schlafzimmer_fenster | Schlafzimmer Fenster | Schlafzimmer\nclimate.homematic_hm_90a211 | Heizkörper Schlafzimmer | Schlafzimmer\nfan.ventilator_schlafzimmer | Ventilator Schlafzimmer | Schlafzimmer\nswitch.tz3000_3054ee | Luftentfeuchter Schlafzimmer | Schlafzimmer\nlight.waschraum_licht | Waschraum | Waschraum\nsensor.fritz_dect_9f0d | Waschraum Luftfeuchtigkeit | Waschraum\nsensor.fritz_dect_f431 | Temperatur Waschraum | Waschraum\nsensor.waschraum_spuelmaschine | Spülmaschine | Waschraum\nswitch.waschraum_heizluefter | Heizlüfter Waschraum | Waschraum\nswitch.waschraum_spuelmaschine_power | Spülmaschine Strom | Waschraum\nalarm_control_panel.sonoff_basic_fffd8a | Alarmanlage | -\nlock.gartentor_haus | Gartentor | -\nsensor.haus_enyaq_iv80_range_ev_remaining_range | Enyaq Reichweite | -\nsensor.homematic_hm_36413a | Enyaq Ladestand | -\ntodo.einkaufsliste | Einkaufsliste | -\nweather.wetter | Wetter | -"
+   },
+   {
+    "role": "user",
+    "content": "Sind die Fenster geschlossen"
+   },
+   {
+    "role": "assistant",
+    "content": null,
+    "tool_calls": [
+     {
+      "id": "call_37756",
+      "type": "function",
+      "function": {
+       "name": "get_state",
+       "arguments": "{\"domain\": \"binary_sensor\", \"area\": \"*\", \"device_class\": \"window\"}"
+      }
+     }
+    ]
+   },
+   {
+    "role": "tool",
+    "tool_call_id": "call_37756",
+    "content": "[{\"entity_id\": \"binary_sensor.sonoff_basic_033bc3\", \"name\": \"Eingang Fenster\", \"state\": \"on\", \"device_class\": \"window\"}, {\"entity_id\": \"binary_sensor.hue_color_lamp_d266\", \"name\": \"Fenster Kinderzimmer\", \"state\": \"on\", \"device_class\": \"window\"}, {\"entity_id\": \"binary_sensor.schlafzimmer_fenster\", \"name\": \"Schlafzimmer Fenster\", \"state\": \"off\", \"device_class\": \"window\"}]"
+   },
+   {
+    "role": "assistant",
+    "content": "Nein. Offen sind: Eingang Fenster und Fenster Kinderzimmer."
+   }
+  ],
+  "meta": {
+   "cat": "question",
+   "gold": [
+    [
+     "get_state",
+     {
+      "domain": "binary_sensor",
+      "area": "*",
+      "device_class": "window"
+     }
+    ]
+   ],
+   "answer_contains": [
+    "Eingang Fenster",
+    "Fenster Kinderzimmer"
+   ],
+   "location": null,
+   "case": "question:windows",
+   "verbosity": "short",
+   "groups": []
+  }
+ },
+ {
+  "locale": "de",
+  "messages": [
+   {
+    "role": "system",
+    "content": "Du bist der Sprachassistent eines Smart Homes mit Home Assistant. Antworte immer auf Deutsch und freundlich. Antworte so knapp wie möglich, mit wenigen Worten.\nSteuere Geräte mit dem Werkzeug control. Frage Zustände und Messwerte mit get_state ab, bevor du Fragen dazu beantwortest.\nVerwende nur entity_ids aus der folgenden Liste. Gibt es ein Gerät nicht, sage das, statt eine entity_id zu erfinden.\nMeint der Nutzer alle Lichter eines Bereichs, gib statt entity_id den Bereich an (area), für das ganze Haus area \"*\".\nTimer stellst du mit timer, Uhrzeit und Datum liefert get_time, Durchsagen an alle Lautsprecher machst du mit broadcast.\n\nGeräte (entity_id | Name | Bereich):\nsensor.humidity_storage | Abstellraum Luftfeuchtigkeit | Abstellraum\nsensor.storage_temperature | Abstellraum Temperatur | Abstellraum\nclimate.study_radiator | Arbeitszimmer Heizkörper | Arbeitszimmer\ncover.shutter_study | Arbeitszimmer Rollladen | Arbeitszimmer\nlight.fairy_lights_study | Licht Bett | Arbeitszimmer\nlight.light_study | Bilderwand Licht | Arbeitszimmer\nlight.study_pendant | Hue Play | Arbeitszimmer\nmedia_player.study_voice_media_player | Atom Echo 7a7e8f Media Player | Arbeitszimmer\nsensor.humidity_study | Arbeitszimmer Luftfeuchtigkeit | Arbeitszimmer\nsensor.study_temperature | Arbeitszimmer Temperatur | Arbeitszimmer\nswitch.study_printer | Arbeitszimmer Drucker | Arbeitszimmer\nlight.balcony_bedside | Pergola Licht | Balkon\nsensor.balcony_outdoor_temperature | Balkon Temperatur | Balkon\ncover.blind_balkontuer_office | Jalousie Balkontür Büro | Büro\ncover.office_blind_fenster | Jalousie Fenster Büro | Büro\nlight.office_fairy_lights | Büro | Büro\nlight.pendant_office | Bilderleuchte | Büro\nsensor.humidity_office | Luftfeuchtigkeit Büro | Büro\nsensor.temperature_office | Temperatur Büro | Büro\nlight.carport_mirror_light | Carport Insel | Carport\nlight.carport_pendant | Carport | Carport\nlight.driveway_lamp | Lampe Einfahrt | Einfahrt\nsensor.driveway_power | Steckdose Leistung Einfahrt | Einfahrt\nbinary_sensor.entrance_front_door_contact | Wohnungstür | Eingang\nbinary_sensor.window_entrance | Fenster Eingang | Eingang\ncover.blinds_entrance | Jalousie Eingang | Eingang\nlight.entrance_spotlights | Eingang Spots | Eingang\nsensor.temperature_entrance | Eingang Temperatur | Eingang\nbinary_sensor.window_guest_room | Gästezimmer Fenster | Gästezimmer\nmedia_player.guest_room_voice_media_player | ESPHome Voice 7a1e Media Player | Gästezimmer\nsensor.temperature_guest_room | Gästezimmer Temperatur | Gästezimmer\nswitch.guest_room_screen | Monitor Gästezimmer | Gästezimmer\nlight.utility_room_mirror_light | Hauswirtschaftsraum Spiegellicht | Hauswirtschaftsraum\nbinary_sensor.kids_room_window | Fenster Kinderzimmer | Kinderzimmer\nclimate.kids_room_aircon | Kinderzimmer Klimaanlage | Kinderzimmer\ncover.blinds_balkontuer_kids_room | Rollo Balkontüre Kinderzimmer | Kinderzimmer\ncover.blinds_fenster_kids_room | Rollo Fenster Kinderzimmer | Kinderzimmer\nlight.kids_room_deckenlicht | Mondlampe | Kinderzimmer\nlight.kids_room_floor_lamp | Stehlampe Kinderzimmer | Kinderzimmer\nlight.kids_room_lamp | Stehleuchte | Kinderzimmer\nmedia_player.fernseher_kids_room | Fernseher Kinderzimmer | Kinderzimmer\nsensor.kids_room_temperature | Kinderzimmer Temperatur | Kinderzimmer\nclimate.aircon_stairs | Treppenhaus Klimaanlage | Treppenhaus\nlight.wall_lamp_stairs | Wandlampe Treppenhaus | Treppenhaus\nsensor.laundry_humidity | Luftfeuchtigkeit Waschküche | Waschküche\nsensor.laundry_temperature | Temperatur Waschküche | Waschküche\nbinary_sensor.workshop_window | Fenster Werkstatt | Werkstatt\nsensor.workshop_humidity | Luftfeuchtigkeit Werkstatt | Werkstatt\ncover.all_covers_home | Rollos Haus | -\ncover.home_covers_dachgeschoss | Dachgeschoss Rolladen | -\nlight.home_all_lights | Alle Lampen | -\nscene.gute_nacht_home | Gute Nacht | -\nscene.home_filmabend | Filmabend | -\nscene.home_romantisch | Romantisch | -\nscene.party_home | Party | -\nscript.gute_nacht_routine_home | Gute-Nacht-Routine | -\nscript.home_urlaubsmodus | Urlaubsmodus | -\nsensor.feels_like_temperature_home | Gefühlte Temperatur | -\ntodo.baumarkt | Baumarkt | -"
+   },
+   {
+    "role": "user",
+    "content": "Was zeigt Steckdose Leistung Einfahrt an"
+   },
+   {
+    "role": "assistant",
+    "content": null,
+    "tool_calls": [
+     {
+      "id": "call_18187",
+      "type": "function",
+      "function": {
+       "name": "get_state",
+       "arguments": "{\"entity_ids\": [\"sensor.driveway_power\"]}"
+      }
+     }
+    ]
+   },
+   {
+    "role": "tool",
+    "tool_call_id": "call_18187",
+    "content": "[{\"entity_id\": \"sensor.driveway_power\", \"name\": \"Steckdose Leistung Einfahrt\", \"state\": \"0\", \"device_class\": \"power\", \"unit_of_measurement\": \"W\"}]"
+   },
+   {
+    "role": "assistant",
+    "content": "Steckdose Leistung Einfahrt zeigt gerade 0 Watt."
+   }
+  ],
+  "meta": {
+   "cat": "question",
+   "gold": [
+    [
+     "get_state",
+     {
+      "entity_ids": [
+       "sensor.driveway_power"
+      ]
+     }
+    ]
+   ],
+   "answer_contains": [
+    "0"
+   ],
+   "location": null,
+   "case": "question:power",
+   "verbosity": "short",
+   "groups": [
+    "light.home_all_lights",
+    "cover.all_covers_home"
+   ]
+  }
+ }
+]

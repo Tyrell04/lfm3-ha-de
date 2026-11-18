@@ -1,0 +1,34 @@
+# Standardkonfiguration. Die CLI-Flags überschreiben einzelne Werte.
+
+model:
+  base: LiquidAI/LFM3-Omni-2B        # alternativ: LiquidAI/LFM3-1.7B (Text, kleiner)
+  max_seq_len: 4096
+
+data:
+  home_assistant: mkenfenheuer/homeassistant-tool-calling
+  locale: de
+  chat_dataset: OpenAssistant/oasst2
+  chat_ratio: 0.08                   # Anteil deutscher Chat-Zeilen (Sprachgefühl)
+  chat_limit: 6000
+  validation_rows: 500
+  publish_as: marc04/homeassistant-tool-calling-lfm3-de
+
+lora:
+  r: 16
+  alpha: 32
+  dropout: 0.05
+  leaves: [q_proj, k_proj, v_proj, o_proj, in_proj, out_proj, w1, w2, w3, gate_proj]
+
+training:
+  epochs: 2
+  learning_rate: 2.0e-4
+  batch_size: 8                      # Colab A100/L4; T4: 1 + grad_accum 16
+  grad_accum: 4
+  warmup_ratio: 0.03
+  max_grad_norm: 0.3
+  save_steps: 200
+  eval_steps: 200
+
+publish:
+  model: marc04/lfm3-ha-de
+  repo: Tyrell04/lfm3-ha-de

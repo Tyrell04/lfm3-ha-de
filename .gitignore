@@ -1,0 +1,16 @@
+# Daten und Artefakte
+data/
+outputs/
+*.ipynb_checkpoints/
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.DS_Store
+*.egg-info/
+build/
+dist/
+wandb/
+.env

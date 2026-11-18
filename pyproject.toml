@@ -1,0 +1,45 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "lfm3-ha-de"
+version = "0.1.0"
+description = "Deutscher Home-Assistant-Werkzeugassistent als LFM3-LoRA-Fine-Tune"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "Marc Leon Schulz" }]
+keywords = ["lfm3", "liquid-ai", "home-assistant", "tool-calling", "german", "lora"]
+dependencies = [
+  "torch>=2.4",
+  "transformers==5.20.2",
+  "peft>=0.17",
+  "accelerate>=1.4",
+  "datasets>=4.0",
+  "huggingface-hub>=0.34",
+  "pyyaml>=6.0",
+  "tqdm>=4.66",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "ruff>=0.9", "jinja2>=3.1"]
+train = ["bitsandbytes>=0.45; sys_platform == 'linux'"]
+
+[project.scripts]
+lfm3ha = "lfm3ha.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+ignore = ["E501"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"

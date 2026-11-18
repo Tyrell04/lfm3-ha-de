@@ -1,0 +1,8 @@
+# Laufzeitabhängigkeiten für Colab (torch ist dort vorinstalliert).
+transformers==5.20.2
+peft>=0.17
+accelerate>=1.4
+datasets>=4.0
+huggingface-hub>=0.34
+pyyaml>=6.0
+tqdm>=4.66

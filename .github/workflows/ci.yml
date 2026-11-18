@@ -1,0 +1,57 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - name: Abhängigkeiten
+        # Bewusst ohne torch/transformers: die Tests prüfen Logik und den
+        # Chat-Template-Vertrag, nicht das Modell.
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install pytest ruff jinja2
+      - name: Lint
+        run: ruff check .
+      - name: Tests
+        run: python -m pytest -q
+
+  data-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - name: Abhängigkeiten
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install datasets huggingface-hub pyyaml
+      - name: Fixture-Zeilen konvertieren
+        run: |
+          python - <<'PY'
+          import json, sys
+          sys.path.insert(0, "src")
+          from lfm3ha.data import normalize_messages, is_usable, categories
+          rows = json.load(open("tests/fixtures/ha_de_rows.json"))
+          assert rows, "Fixture leer"
+          for row in rows:
+              messages = normalize_messages(row["messages"])
+              assert is_usable(messages), "Zeile unbrauchbar"
+              calls = [c for m in messages for c in (m.get("tool_calls") or [])]
+              assert calls, "keine Werkzeugaufrufe"
+              for call in calls:
+                  assert isinstance(call["function"]["arguments"], dict)
+              assert categories(messages)
+          print(f"OK: {len(rows)} Zeilen konvertiert")
+          PY
