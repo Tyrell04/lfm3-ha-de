@@ -97,6 +97,23 @@ def load_for_inference(base_model: str, adapter: str | None = None, load_in_4bit
     return model, tok, dtype
 
 
+def extract_new_tokens(result, prompt_len: int):
+    """Schneidet die neu erzeugten Token aus dem, was ``generate`` liefert.
+
+    ``Lfm3OmniForConditionalGeneration.generate`` gibt kein Tensor-Paar zurück,
+    sondern ein ``Lfm3OmniGenerateOutput`` mit ``sequences`` (Prompt + Antwort)
+    und ``sequence_lengths``. Wer das wie einen Tensor indiziert, bekommt eine
+    leere Sequenz – und wundert sich über 0 % Trefferquote bei gutem Loss.
+    Reine Textmodelle liefern weiterhin einen Tensor.
+    """
+    sequences = getattr(result, "sequences", result)
+    if isinstance(sequences, (list, tuple)):
+        sequences = sequences[0]
+    lengths = getattr(result, "sequence_lengths", None)
+    end = int(lengths[0]) if lengths is not None else sequences.shape[-1]
+    return sequences[0][prompt_len:end]
+
+
 def generate_text(model, tok, messages: list[dict[str, Any]], max_new_tokens: int = 256) -> str:
     import torch
 
@@ -110,7 +127,7 @@ def generate_text(model, tok, messages: list[dict[str, Any]], max_new_tokens: in
     ).to(model.device)
 
     with torch.inference_mode():
-        output = model.generate(
+        result = model.generate(
             **inputs,
             do_sample=False,
             max_new_tokens=max_new_tokens,
@@ -118,7 +135,7 @@ def generate_text(model, tok, messages: list[dict[str, Any]], max_new_tokens: in
             pad_token_id=tok.pad_token_id,
             eos_token_id=tok.eos_token_id,
         )
-    new_tokens = output[0][inputs["input_ids"].shape[1] :]
+    new_tokens = extract_new_tokens(result, inputs["input_ids"].shape[1])
     return tok.decode(new_tokens, skip_special_tokens=True).strip()
 
 
