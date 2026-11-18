@@ -101,6 +101,9 @@ LFM3-Omni-2B, Werkzeugschemas im Prompt):
 
 | Kennzahl | Wert |
 |---|---|
+| Trainingszeilen | 29.048 (davon 1.228 OASST2-Gespräche, 4,2 %) |
+| Testzeilen | 300 (aus dem Test-Split der Quelle, nie trainiert) |
+| Validierung | 500 (aus dem Trainingsanteil abgezweigt) |
 | Prompt-Länge p50 | 2.290 Token |
 | p90 / p99 / max | 3.073 / 3.815 / 5.173 Token |
 | Anteil Assistenten-Token | 2–12 % (der Rest ist Geräteliste + Schemas) |

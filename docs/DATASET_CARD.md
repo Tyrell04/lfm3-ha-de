@@ -18,6 +18,8 @@ size_categories:
 
 # Home Assistant Tool Calling – LFM3, Deutsch
 
+29.048 Trainingszeilen · 500 Validierung · 300 Test · deutschsprachig.
+
 Deutschsprachiges Trainingsset für Werkzeugaufrufe eines Smart-Home-
 Assistenten, aufbereitet für **Liquid AI LFM3** (Chat-Template mit
 `<tool_call>`-Blöcken). Erzeugt von
@@ -62,8 +64,9 @@ sind **Objekte**, keine JSON-Strings – das LFM3-Template lehnt Strings ab.
    `deleted`, negativem `review_result`, negativem `rank` und synthetische
    Turns aussortieren.
 5. Duplikate über einen Hash der Konversation entfernen.
-6. Chat-Zeilen mit 8 % Anteil zumischen – genug für den Ton, wenig genug,
-   dass die Werkzeugdisziplin nicht leidet.
+6. Chat-Zeilen beimischen (Zielanteil 8 %, gedeckelt durch das Angebot:
+   OASST2-de liefert nach Filterung 1.228 Gespräche, das sind 4,2 %) – genug
+   für den Ton, wenig genug, dass die Werkzeugdisziplin nicht leidet.
 7. Train/Validation/Test trennen; Test stammt aus dem Test-Split der
    HA-Quelle und wird nicht angefasst.
 

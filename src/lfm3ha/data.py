@@ -161,18 +161,34 @@ def load_ha_de(
 # --------------------------------------------------------------------------- #
 # Quelle 2: OASST2 (deutsche Threads)
 # --------------------------------------------------------------------------- #
-def _walk_thread(root: dict[str, Any], children: dict[str, list[dict[str, Any]]]):
-    path = [root]
-    node = root
-    while children.get(node["message_id"]):
+def _best_path(node: dict[str, Any], children: dict[str, list[dict[str, Any]]]):
+    """Folgt vom Knoten aus jeweils der bestbewerteten Antwort."""
+    path = [node]
+    while children.get(node["message_id"]) and len(path) < 6:
         node = max(
             children[node["message_id"]],
             key=lambda m: (m.get("rank") or 0, m.get("review_count") or 0),
         )
         path.append(node)
-        if len(path) >= 7:  # höchstens 3 Runden
-            break
     return path
+
+
+def _iter_threads(root: dict[str, Any], children: dict[str, list[dict[str, Any]]]):
+    """Alle brauchbaren Gesprächsfäden eines Wurzelknotens.
+
+    OASST2 ist ein Baum: unter einer Frage hängen mehrere Antworten, unter
+    jeder wieder mehrere. Eine Wurzel kann also mehrere unabhängige Gespräche
+    tragen – wir laufen jede Antwort der zweiten Ebene einmal ab, statt nur den
+    besten Zweig zu nehmen. Sonst bliebe vom deutschen Teil kaum etwas übrig.
+    """
+    replies = children.get(root["message_id"], [])
+    if not replies:
+        return
+    ordered = sorted(
+        replies, key=lambda m: (m.get("rank") or 0, m.get("review_count") or 0), reverse=True
+    )
+    for reply in ordered:
+        yield [root, *_best_path(reply, children)]
 
 
 def _path_to_messages(path: list[dict[str, Any]]) -> list[dict[str, Any]]:
@@ -183,13 +199,17 @@ def _path_to_messages(path: list[dict[str, Any]]) -> list[dict[str, Any]]:
         if not text:
             continue
         if role == "assistant" and not _good_answer(text):
-            # Schlechte Antwort beendet den Thread: alles danach baut darauf auf.
+            # Schlechte Antwort beendet den Faden: alles danach baut darauf auf.
             break
         if messages[-1]["role"] == role:  # gleiche Rolle zweimal -> ersetzen
             if len(text) > len(messages[-1]["content"]):
                 messages[-1]["content"] = text
             continue
         messages.append({"role": role, "content": text})
+    # Endet der Faden auf einer Frage, ist der letzte Assistenten-Turn die
+    # Antwort – die abschließende Frage wird verworfen.
+    while len(messages) > 1 and messages[-1]["role"] != "assistant":
+        messages.pop()
     return messages
 
 
@@ -224,24 +244,31 @@ def load_oasst2_de(limit: int = 4000, min_rank: int = 0) -> list[dict[str, Any]]
 
     random.Random(42).shuffle(roots)
     rows: list[dict[str, Any]] = []
+    seen: set[str] = set()
     for root in roots:
-        path = _walk_thread(root, children)
-        messages = _path_to_messages(path)
-        if len(messages) < 3 or messages[-1]["role"] != "assistant":
-            continue
-        if not is_usable(messages):
-            continue
-        rows.append(
-            {
-                "messages": messages,
-                "locale": "de",
-                "source": "oasst2",
-                "category": "chat",
-                "case": "",
-            }
-        )
-        if len(rows) >= limit:
-            break
+        for path in _iter_threads(root, children):
+            messages = _path_to_messages(path)
+            if len(messages) < 3:
+                continue
+            if not any(m["role"] == "assistant" for m in messages):
+                continue
+            if not is_usable(messages):
+                continue
+            fingerprint = _fingerprint({"messages": messages})
+            if fingerprint in seen:
+                continue
+            seen.add(fingerprint)
+            rows.append(
+                {
+                    "messages": messages,
+                    "locale": "de",
+                    "source": "oasst2",
+                    "category": "chat",
+                    "case": "",
+                }
+            )
+            if len(rows) >= limit:
+                return rows
     return rows
 
 

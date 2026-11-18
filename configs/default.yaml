@@ -8,7 +8,7 @@ data:
   home_assistant: mkenfenheuer/homeassistant-tool-calling
   locale: de
   chat_dataset: OpenAssistant/oasst2
-  chat_ratio: 0.08                   # Anteil deutscher Chat-Zeilen (Sprachgefühl)
+  chat_ratio: 0.08                   # Zielanteil Chat; OASST2-de deckelt bei ~4 %
   chat_limit: 6000
   validation_rows: 500
   publish_as: marc04/homeassistant-tool-calling-lfm3-de

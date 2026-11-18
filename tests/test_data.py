@@ -117,7 +117,7 @@ def test_thread_path_alternates_roles():
         {"role": "prompter", "text": "Und was kostet das im Jahr ungefähr?"},
     ]
     messages = _path_to_messages(path)
-    assert [m["role"] for m in messages] == ["system", "user", "assistant", "user"]
+    assert [m["role"] for m in messages] == ["system", "user", "assistant"]
 
 
 def test_bad_oasst_answer_ends_the_thread():
@@ -130,7 +130,22 @@ def test_bad_oasst_answer_ends_the_thread():
         {"role": "prompter", "text": "Schade, dann beschreib ihn wenigstens."},
     ]
     messages = _path_to_messages(path)
-    assert [m["role"] for m in messages] == ["system", "user"]
+    # Ohne brauchbare Antwort bleibt kein vollständiger Turn übrig.
+    assert [m["role"] for m in messages] == ["system"]
+
+
+def test_trailing_question_is_trimmed():
+    path = [
+        {"role": "prompter", "text": "Warum ist der Himmel blau?"},
+        {
+            "role": "assistant",
+            "text": "Weil die Luft kurze Wellenlängen stärker streut als lange – daher "
+            "erscheint der Himmel blau, abends dann rot.",
+        },
+        {"role": "prompter", "text": "Und warum ist er nachts schwarz?"},
+    ]
+    messages = _path_to_messages(path)
+    assert [m["role"] for m in messages] == ["system", "user", "assistant"]
 
 
 def test_tool_row_payload_is_json_serializable():
