@@ -4,7 +4,7 @@
 
 | GPU | VRAM | Einstellung | Recheneinheiten/Std. | Voller Lauf (geschätzt) | Einheiten pro Lauf |
 |---|---|---|---|---|---|
-| Colab T4 (frei) | 16 GB | `--batch-size 1 --grad-accum 16` fp16 | ~1,1 | 20–24 h | ~23–28 (bzw. gratis) |
+| Colab T4 (frei) | 16 GB | `--batch-size 1 --grad-accum 16` fp16 | ~1,1 | 30–34 h (gemessen) | ~23–28 (bzw. gratis) |
 | Colab L4 | 24 GB | `--batch-size 4 --grad-accum 8` bf16 | ~1,6 | 9–11 h | ~15–18 |
 | Colab A100 40 GB | 40 GB | Standard (`8 × 4`) bf16 | ~5,3 | 3,5–4,5 h | ~19–24 |
 | Colab A100 80 GB | 80 GB | Standard (`8 × 4`) bf16 | ~7,0 | 3–4 h | ~21–28 |
@@ -40,8 +40,39 @@ beide Varianten; Pro+ (600) brauchst du nur, wenn du mehrere Läufe vergleichst.
 3. `Einheiten pro Stunde ≈ ΔEinheiten / (ΔMinuten / 60)`; hochrechnen mit
    `Laufzeit ≈ Smoke-Laufzeit × 29.048 × Epochen / 400`.
 
-T4 kann **kein bf16**. Das Skript erkennt das (`torch.cuda.is_bf16_supported()`)
-und schaltet auf fp16. Wenn du das erzwingst, bekommst du NaN-Loss.
+T4 kann **kein bf16**, und `torch.cuda.is_bf16_supported()` behauptet es dort
+trotzdem (torch 2.14). Das Skript glaubt dem Flag deshalb nicht, sondern
+`pick_dtype()` fragt die Compute Capability und nimmt bf16 erst ab 8.0.
+Erzwungenes bf16 auf einer T4 liefert NaN-Loss.
+
+## Gemessen auf einer Colab-T4 (18.11.2026)
+
+Die Zahl im Notebook ist kein Versprechen, sondern ein Protokoll: Smoke-Lauf
+mit 400 Zeilen, 1 Epoche, `batch 1 × accum 16`.
+
+| Abschnitt | Dauer |
+|---|---|
+| Setup (pip, clone, `pip install -e .`) | ~3 min |
+| `prepare --limit 400 --oasst-limit 120` | 1:27 min |
+| Training, 25 Schritte | 14:39 min → **35 s/Schritt** |
+| `eval --limit 100` (Basismodell) | 3:47 min |
+| `eval --limit 100` (+ Adapter) | 5:30 min |
+
+35 s pro Schritt heißt bei `batch 1 × accum 16` rund 0,47 Beispiele/s – der
+volle Datensatz (58.096 Beispiele über 2 Epochen) braucht damit **~34 Stunden**.
+Das bestätigt die Empfehlung oben: T4 nur für den Smoke-Test.
+
+Ergebnis des Smoke-Laufs, 94 Werkzeug-Zeilen aus dem Test-Split:
+
+| Metrik | Basismodell | + LoRA (25 Schritte) |
+|---|---|---|
+| `parse` | 93,6 % | 98,9 % |
+| `function` | 85,1 % | 88,3 % |
+| `exact` | 30,9 % | 44,7 % |
+
+Nach 25 Schritten ist das noch kein Modell, sondern ein Lebenszeichen: die
+Pipeline lernt in die richtige Richtung, und die Logits sind gesund (kein NaN).
+Die echten Zahlen kommen aus dem vollen Lauf.
 
 ## Daten
 

@@ -33,6 +33,60 @@ du `tool_calls` übergibst). Für LFM2.5 liquid-finetune.
 `bf16=False, fp16=True`. Bei fp16 zusätzlich `max_grad_norm` klein halten
 (0.3) und Warmup nicht weglassen – sonst NaNs.
 
+**Achtung, gemessen auf einer Colab-T4 (torch 2.14):**
+`torch.cuda.is_bf16_supported()` meldet dort **`True`**, obwohl die Karte
+kein bf16 kann. Wer sich auf das Flag verlässt, trainiert in emuliertem bf16.
+`pick_dtype()` fragt deshalb `get_device_capability()` und nimmt bf16 erst ab
+8.0 – nicht das Flag.
+
+## `ImportError: Found an incompatible version of torchao`
+
+```
+ImportError: Found an incompatible version of torchao. Found version 0.10.0,
+but only versions above 0.16.0 are supported
+```
+
+**Ursache:** Colab bringt `torchao 0.10` mit, `peft ≥ 0.21` verlangt > 0.16.
+Der Fehler fliegt beim Anhängen des Adapters – mitten in `get_peft_model`,
+also nach Modell-Download und Tokenisierung.
+
+**Fix:** `pip install -U "torchao>=0.16"` (oder `pip uninstall -y torchao`,
+wenn du keine quantisierten Adapter brauchst). Das Notebook macht das in der
+Setup-Zelle; `check_peft_env()` bricht sonst vorher mit genau diesem Hinweis ab.
+
+## `TypeError: TrainingArguments.__init__() got an unexpected keyword argument`
+
+**Ursache:** transformers 5 hat `warmup_ratio` und `group_by_length` aus
+`TrainingArguments` entfernt (`max_length`-bezogene Felder ebenfalls
+umsortiert). Der Lauf stirbt, bevor der erste Schritt läuft.
+
+**Fix:** `warmup_steps` selbst rechnen (`ratio × Schritte`); `group_by_length`
+weglassen. Beides ist im Repo erledigt.
+
+## `KeyError: 'messages'` beim Tokenisieren
+
+**Ursache:** `load_dataset("data/lfm3-ha-de")` auf einem `save_to_disk`-Ordner.
+`datasets` hält `state.json` für eine Datendatei und liefert je Split **eine**
+Zeile, deren Spalten die Schlüssel von `state.json` sind (`_data_files`,
+`_fingerprint`, …). Der Fehler bleibt über Neustarts, weil `datasets` das
+Ergebnis zusätzlich in `~/.cache/huggingface/datasets` ablegt.
+
+**Fix:** lokal `load_from_disk` benutzen – `lfm3ha.data.load_any_dataset()`
+entscheidet anhand des Pfads. Wenn es schon passiert ist:
+`rm -rf ~/.cache/huggingface/datasets/lfm3-ha-de`.
+
+## Alle Metriken 0 %, obwohl das Modell sinnvoll antwortet
+
+**Ursache:** `Lfm3OmniForConditionalGeneration.generate` gibt ein
+`Lfm3OmniGenerateOutput` zurück (`sequences`, `sequence_lengths`,
+`audio_codes`), keinen Tensor. `output[0][prompt_len:]` darauf ergibt eine
+leere Sequenz.
+
+**Fix:** `lfm3ha.infer.extract_new_tokens()` benutzen oder selbst
+`result.sequences[0][prompt_len:result.sequence_lengths[0]]` schneiden.
+Gegenprobe: Logits des letzten Prompt-Tokens anschauen – wenn dort `Hallo`
+mit Abstand vorn liegt, ist das Modell in Ordnung und nur das Auslesen kaputt.
+
 ## `ModuleNotFoundError: No module named 'transformers.models.lfm3_omni'`
 
 **Ursache:** `trust_remote_code=True` fehlt oder die Transformers-Version ist
