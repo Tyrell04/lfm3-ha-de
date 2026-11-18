@@ -153,7 +153,9 @@ def cmd_eval(args: argparse.Namespace) -> int:
     metrics = run_eval(model, tok, ds, limit=args.limit, max_new_tokens=args.max_new_tokens)
     print(json.dumps(metrics, indent=2, ensure_ascii=False))
     if args.out:
-        Path(args.out).write_text(
+        target = Path(args.out)
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_text(
             json.dumps(metrics, indent=2, ensure_ascii=False), encoding="utf-8"
         )
         print(f"✓ {args.out}")

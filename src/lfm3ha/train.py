@@ -66,17 +66,53 @@ class TrainConfig:
 # Modell
 # --------------------------------------------------------------------------- #
 def pick_dtype(torch):
+    """bf16 nur ab Ampere (Compute Capability 8.0), sonst fp16.
+
+    ``torch.cuda.is_bf16_supported()`` meldet auf einer T4 (CC 7.5) mit
+    torch 2.14 ``True``, obwohl Turing kein bf16 kann – das Training läuft
+    dann in emuliertem bf16 und liefert NaN. Die Compute Capability lügt nicht.
+    """
     if torch.cuda.is_available():
-        return torch.bfloat16 if torch.cuda.is_bf16_supported() else torch.float16
+        try:
+            major = torch.cuda.get_device_capability(0)[0]
+        except Exception:  # exotische Backends ohne Capability-Auskunft
+            major = 0
+        return torch.bfloat16 if major >= 8 else torch.float16
     if getattr(torch.backends, "mps", None) and torch.backends.mps.is_available():
         return torch.float16
     return torch.float32
+
+
+TORCHAO_MIN = (0, 16)
+
+
+def check_peft_env() -> None:
+    """Abbruch mit klarer Anleitung, wenn das Umfeld peft blockiert.
+
+    Colab bringt ``torchao 0.10`` mit; peft ≥ 0.21 verlangt > 0.16 und wirft
+    beim Anhängen des Adapters einen ``ImportError`` mitten aus dem Nichts.
+    Lieber vorher prüfen als hinterher einen Traceback zu entziffern.
+    """
+    try:
+        from importlib.metadata import version
+
+        raw = version("torchao")
+    except Exception:  # nicht installiert – der Normalfall außerhalb Colabs
+        return
+    digits = [int(p) for p in raw.split(".")[:2] if p.isdigit()]
+    if len(digits) == 2 and tuple(digits) < TORCHAO_MIN:
+        raise SystemExit(
+            f"torchao {raw} ist zu alt für peft (verlangt > 0.16.0).\n"
+            "Fix: pip install -U 'torchao>=0.16'  – oder: pip uninstall -y torchao"
+        )
 
 
 def load_model(model_id: str, load_in_4bit: bool = False):
     """Lädt LFM3 – Omni über ``AutoModelForMultimodalLM``, sonst causal LM."""
     import torch
     from transformers import AutoConfig, AutoModelForCausalLM
+
+    check_peft_env()
 
     dtype = pick_dtype(torch)
     config = AutoConfig.from_pretrained(model_id, trust_remote_code=True)
