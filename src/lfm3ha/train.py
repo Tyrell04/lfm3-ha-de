@@ -288,8 +288,6 @@ def train(cfg: TrainConfig) -> Path:
         data_seed=cfg.seed,
         remove_unused_columns=False,
         dataloader_num_workers=2,
-        group_by_length=True,
-        length_column_name="length",
     )
 
     trainer = Trainer(
