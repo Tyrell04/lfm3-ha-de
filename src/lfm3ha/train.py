@@ -9,6 +9,7 @@ Colab-GPU läuft – inklusive fp16-Fallback auf T4 (kein bf16).
 from __future__ import annotations
 
 import json
+import math
 import re
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
@@ -256,6 +257,11 @@ def train(cfg: TrainConfig) -> Path:
             print(f"→ Validation: {len(eval_ds)} Zeilen ({eval_dropped} zu lang)")
     print(f"→ Training: {len(train_ds)} Zeilen ({dropped} zu lang / verworfen)")
 
+    # Transformers 5 kennt ``warmup_ratio`` nicht mehr – nur Schritte.
+    steps_per_epoch = math.ceil(len(train_ds) / (cfg.batch_size * cfg.grad_accum))
+    warmup_steps = max(1, round(cfg.warmup_ratio * steps_per_epoch * cfg.epochs))
+    print(f"→ {steps_per_epoch * cfg.epochs} Schritte, davon {warmup_steps} Warmup")
+
     args = TrainingArguments(
         output_dir=str(out),
         num_train_epochs=cfg.epochs,
@@ -264,7 +270,7 @@ def train(cfg: TrainConfig) -> Path:
         gradient_accumulation_steps=cfg.grad_accum,
         learning_rate=cfg.learning_rate,
         lr_scheduler_type="cosine",
-        warmup_ratio=cfg.warmup_ratio,
+        warmup_steps=warmup_steps,
         weight_decay=cfg.weight_decay,
         max_grad_norm=cfg.max_grad_norm,
         logging_steps=cfg.logging_steps,
