@@ -2,18 +2,43 @@
 
 ## Hardware
 
-| GPU | VRAM | Einstellung | Dauer (Schätzung, siehe Hinweis) |
-|---|---|---|---|
-| Colab T4 (frei) | 16 GB | `--batch-size 1 --grad-accum 16` fp16 | Smoke-Test ja, voller Lauf knapp |
-| Colab L4 | 24 GB | `--batch-size 4 --grad-accum 8` bf16 | voller Lauf machbar |
-| Colab A100 | 40 GB | Standard (`8 × 4`) bf16 | komfortabel |
-| RTX 3090/4090 | 24 GB | `--batch-size 4 --grad-accum 8` | gut |
+| GPU | VRAM | Einstellung | Recheneinheiten/Std. | Voller Lauf (geschätzt) | Einheiten pro Lauf |
+|---|---|---|---|---|---|
+| Colab T4 (frei) | 16 GB | `--batch-size 1 --grad-accum 16` fp16 | ~1,1 | 20–24 h | ~23–28 (bzw. gratis) |
+| Colab L4 | 24 GB | `--batch-size 4 --grad-accum 8` bf16 | ~1,6 | 9–11 h | ~15–18 |
+| Colab A100 40 GB | 40 GB | Standard (`8 × 4`) bf16 | ~5,3 | 3,5–4,5 h | ~19–24 |
+| Colab A100 80 GB | 80 GB | Standard (`8 × 4`) bf16 | ~7,0 | 3–4 h | ~21–28 |
+| Colab G4 (Pro+) | 96 GB | Standard | ~8,8 | 2–2,5 h | ~18–22 |
+| Colab H100 (Pro+) | 80 GB | Standard | ~18 | 1,5–2 h | ~27–36 |
+| RTX 3090/4090 (lokal) | 24 GB | `--batch-size 4 --grad-accum 8` | – | 18–22 h | – |
 
-> Die offizielle Liquid-Angabe für ein ähnliches Setup: eine Epoche über
-> ~6.600 Audio-Beispiele auf einer A100 in ~10 Minuten. Hier ist der Prompt
-> deutlich länger (Geräteliste + Schemas), dafür sind die Beispiele Text –
-> rechne mit Größenordnung 1–3 Stunden für den vollen deutschen Datensatz auf
-> einer A100 und messe es selbst.
+> Google veröffentlicht die Verbrauchsraten nicht; die Spalte sind
+> Nutzermessungen (Stand 2026). Die Dauern sind aus der Tokenmenge geschätzt:
+> 29.048 Zeilen × 2 Epochen × ~2.400 Token ≈ 140 Mio. Token, also rund
+> 1,6 · 10¹⁸ FLOP bei 6 · N · D. Beides zusammen auf ±50 % genau – miss es
+> einmal selbst nach (siehe unten), statt dich darauf zu verlassen.
+
+**Was das für die Wahl heißt.** Ein Unit-Preis sagt nichts; entscheidend sind
+Einheiten *pro fertigem Lauf*. Die Verbrauchsrate wächst ungefähr so schnell wie
+der Durchsatz, deshalb liegen L4 (~16) und A100 (~21) nah beieinander, obwohl
+die A100 die 2,4-fache Rate hat. Die A100 gewinnt trotzdem: bei 4 Stunden ist
+der Lauf in einer Sitzung fertig, bei 10 Stunden auf der L4 brauchst du
+`--resume` und zwei Anläufe. G4 und H100 sind für ein 2B-LoRA-Gehirn Geld-
+verbrennung – der Engpass ist Speicherbandbreite und Fixkosten, nicht Rechen-
+leistung. T4 ist gratis, aber 20+ Stunden fp16 mit Abbruchrisiko – nur für den
+Smoke-Test.
+
+**Empfehlung:** A100 40 GB für den echten Lauf, L4 wenn dir Einheiten wichtiger
+sind als Zeit, T4 nur für `SMOKE = True`. Pro (100 Einheiten/Monat) reicht für
+beide Varianten; Pro+ (600) brauchst du nur, wenn du mehrere Läufe vergleichst.
+
+**Selbst nachmessen** (dauert eine Minute, ersetzt jede Schätzung):
+
+1. In Colab links *Ressourcen* öffnen – dort steht der Einheitenstand.
+2. Stand notieren, Smoke-Lauf starten (`SMOKE = True`, 400 Zeilen), Stand
+   erneut notieren.
+3. `Einheiten pro Stunde ≈ ΔEinheiten / (ΔMinuten / 60)`; hochrechnen mit
+   `Laufzeit ≈ Smoke-Laufzeit × 29.048 × Epochen / 400`.
 
 T4 kann **kein bf16**. Das Skript erkennt das (`torch.cuda.is_bf16_supported()`)
 und schaltet auf fp16. Wenn du das erzwingst, bekommst du NaN-Loss.
