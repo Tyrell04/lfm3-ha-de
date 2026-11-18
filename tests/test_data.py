@@ -151,3 +151,29 @@ def test_trailing_question_is_trimmed():
 def test_tool_row_payload_is_json_serializable():
     messages = normalize_messages(RAW_ROW)
     assert json.loads(json.dumps(messages, ensure_ascii=False))
+
+
+def test_load_any_dataset_liest_save_to_disk_ordner(tmp_path):
+    """Regression: ``load_dataset`` liefert für einen solchen Ordner Unsinn.
+
+    Es hält ``state.json`` für eine Datendatei und gibt je Split eine Zeile
+    mit Metadaten-Spalten zurück – das Training scheiterte danach mit
+    ``KeyError: 'messages'``.
+    """
+    from datasets import Dataset, DatasetDict
+
+    from lfm3ha.data import load_any_dataset, load_split
+
+    raw = DatasetDict(
+        {
+            "train": Dataset.from_dict(
+                {"messages": ["[]"], "tools": ["[]"], "category": ["chat"]}
+            )
+        }
+    )
+    target = tmp_path / "daten"
+    raw.save_to_disk(str(target))
+
+    geladen = load_any_dataset(str(target))
+    assert geladen["train"].column_names == ["messages", "tools", "category"]
+    assert load_split(str(target), "train")[0]["messages"] == "[]"

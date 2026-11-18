@@ -125,6 +125,37 @@ def categories(messages: list[dict[str, Any]]) -> str:
 # --------------------------------------------------------------------------- #
 # Quelle 1: Home Assistant
 # --------------------------------------------------------------------------- #
+def load_any_dataset(path_or_id: str):
+    """Liest einen lokalen ``save_to_disk``-Ordner **oder** einen Hub-Datensatz.
+
+    ``load_dataset`` ist für vorbereitete Ordner die falsche Funktion: es hält
+    ``state.json`` und ``dataset_info.json`` für Datendateien und liefert je
+    Split genau eine Zeile, deren Spalten die Schlüssel von ``state.json``
+    sind. Das Training stirbt dann mit ``KeyError: 'messages'`` – und weil
+    ``datasets`` das Ergebnis zusätzlich in ``~/.cache`` ablegt, bleibt der
+    Fehler auch nach einem Neustart. Lokal ist ``load_from_disk`` richtig.
+    """
+    from pathlib import Path
+
+    path = Path(path_or_id)
+    if path.exists():
+        from datasets import load_from_disk
+
+        return load_from_disk(str(path))
+
+    from datasets import load_dataset
+
+    return load_dataset(path_or_id)
+
+
+def load_split(path_or_id: str, split: str):
+    """Wie :func:`load_any_dataset`, aber direkt ein einzelner Split."""
+    dataset = load_any_dataset(path_or_id)
+    if hasattr(dataset, "keys"):  # DatasetDict
+        return dataset[split]
+    return dataset
+
+
 def load_ha_de(
     limit: int | None = None,
     streaming: bool = False,

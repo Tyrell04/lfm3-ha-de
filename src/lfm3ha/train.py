@@ -15,6 +15,7 @@ from pathlib import Path
 from typing import Any
 
 from .chatfmt import PadCollator, build_example, load_text_tokenizer
+from .data import load_any_dataset
 from .tools_de import TOOLS
 
 # Projektionen, die LoRA bekommt. in_proj/out_proj sind die gated short
@@ -217,7 +218,6 @@ def tokenize_split(dataset, tok, max_len: int, limit: int | None, num_proc: int 
 # --------------------------------------------------------------------------- #
 def train(cfg: TrainConfig) -> Path:
     import torch
-    from datasets import load_dataset
     from transformers import Trainer, TrainingArguments
 
     torch.manual_seed(cfg.seed)
@@ -241,7 +241,7 @@ def train(cfg: TrainConfig) -> Path:
     model = attach_lora(model, cfg, prefer_language_model=is_omni)
 
     print(f"→ Datensatz: {cfg.dataset}")
-    raw = load_dataset(cfg.dataset)
+    raw = load_any_dataset(cfg.dataset)
     train_ds, dropped = tokenize_split(
         raw["train"], tok, cfg.max_seq_len, cfg.max_train_rows
     )

@@ -141,15 +141,14 @@ def cmd_train(args: argparse.Namespace) -> int:
 # eval
 # --------------------------------------------------------------------------- #
 def cmd_eval(args: argparse.Namespace) -> int:
-    from datasets import load_dataset
-
+    from .data import load_split
     from .infer import load_for_inference, run_eval
 
     print(f"→ Modell: {args.base_model}  Adapter: {args.adapter or '—'}")
     model, tok, _ = load_for_inference(
         args.base_model, args.adapter, load_in_4bit=args.load_in_4bit
     )
-    ds = load_dataset(args.dataset, split=args.split)
+    ds = load_split(args.dataset, args.split)
     metrics = run_eval(model, tok, ds, limit=args.limit, max_new_tokens=args.max_new_tokens)
     print(json.dumps(metrics, indent=2, ensure_ascii=False))
     if args.out:
