@@ -83,6 +83,12 @@ def cmd_prepare(args: argparse.Namespace) -> int:
 def _push_dataset(out: Path, repo_id: str, private: bool, summary: dict) -> None:
     from huggingface_hub import HfApi
 
+    # ``Dataset.map`` (z. B. beim Tokenisieren) legt cache-*.arrow neben die
+    # Daten. Werden die mit hochgeladen, liest ``load_dataset`` anschließend
+    # die tokenisierten Zwischenstände statt der Konversationen.
+    for stale in out.rglob("cache-*.arrow"):
+        stale.unlink()
+
     api = HfApi()
     api.create_repo(repo_id, repo_type="dataset", private=private, exist_ok=True)
     card = Path("docs/DATASET_CARD.md")
@@ -93,6 +99,7 @@ def _push_dataset(out: Path, repo_id: str, private: bool, summary: dict) -> None
         folder_path=str(out),
         repo_id=repo_id,
         repo_type="dataset",
+        ignore_patterns=["*/cache-*.arrow", "cache-*.arrow"],
         commit_message="Upload LFM3 Home-Assistant DE Trainingsset",
     )
     print(f"✓ Datensatz: https://huggingface.co/datasets/{repo_id}")

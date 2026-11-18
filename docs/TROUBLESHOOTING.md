@@ -73,6 +73,17 @@ hat Aussetzer.
 **Fix:** `load_dataset(...)` lädt die Parquet-Dateien direkt und ist davon
 nicht betroffen. Nur die Vorschau im Browser leidet.
 
+## `load_dataset` liefert `input_ids` statt `messages`
+
+**Ursache:** Beim Tokenisieren (`Dataset.map`) schreibt `datasets`
+`cache-*.arrow`-Dateien **neben** die Daten. Werden die mit hochgeladen,
+findet `load_dataset` sie zuerst und liefert die tokenisierten
+Zwischenstände.
+
+**Fix:** `lfm3ha prepare --push-to-hub` löscht sie vor dem Upload und
+ignoriert sie zusätzlich beim Hochladen. Bei manuellem Upload:
+`huggingface-cli upload … --exclude "*/cache-*.arrow"`.
+
 ## `homeassistant-tool-calling-de` lässt sich nicht laden
 
 **Ursache:** Der Datensatz wurde umbenannt und leitet auf
